@@ -6,9 +6,9 @@ app.use(express.json());
 
 // Webhook tokens
 const WEBHOOK_VERIFY_TOKEN = "Itv@2021";
-const PAGE_ACCESS_TOKEN = "EAAVbR4qcP2IBQGkl2jvLzqwVEPZC7mEWe3f3qrbH8EJC8Djv1ikkkU4OOWjtWCDDva6dVPYOyyK1fWXzZCAQRI2Y0bngmhGpZASghbTAuVGHGgRrGoJLluB7CFPZCxWRnSw1viLFx7DtDWRfemA7UAafUmBKl2UkWu8PRk3AxNAq5LbMAb3qNKPGZB5ZAW0SsZCKbexmUOFBR7PK4AUeftudLUg7gZDZD";
+const PAGE_ACCESS_TOKEN = "EAAQlp2JF0csBQLZBoPTrVAF9ngUDTXXlzj1ZCM4BG0JkW7l90GSy6tX8tv4ZByL0XVSC1W2EJwSXsrglVgwr5cuhYhSfqQHag8nOUc3tTHnmqdzJxlpRr37FS8EKf2BZBAvaMZBKuiZBUhZAI8821pj8KWq5JWOoINYqAVafvsVsZCWZALXNcZBjx5aPHocduqfHE6vuAZD";
 
-const PORT = process.env.PORT || 3000;
+const PORT = 80 //process.env.PORT || 3000;
 
 // Handle incoming Messenger webhooks
 app.post("/webhook", async (req, res) => {
@@ -28,7 +28,7 @@ app.post("/webhook", async (req, res) => {
     // Reply back to the user
     await axios({
       method: "POST",
-      url: `https://graph.facebook.com/v24.0/879937481865048/messages?access_token=${PAGE_ACCESS_TOKEN}`,
+      url: `https://graph.facebook.com/v24.0/104072462367834/messages?access_token=${PAGE_ACCESS_TOKEN}`,
       data: {
         recipient: { id: senderId },
         message: { text: "Echo: " + messageText }
