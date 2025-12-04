@@ -17,40 +17,51 @@ app.post("/webhook", async (req, res) => {
   const entry = req.body.entry?.[0];
   const messaging = entry?.messaging?.[0];
 
-  if (!messaging) {
-    return res.sendStatus(200);
-  }
+  if (!messaging) return res.sendStatus(200);
 
   const senderId = messaging.sender?.id; // PSID
   const messageText = messaging.message?.text;
 
-  if (messageText) {
-    // Reply back to the user
-    await axios({
-      method: "POST",
-      url: `https://graph.facebook.com/v24.0/104072462367834/messages?access_token=${PAGE_ACCESS_TOKEN}`,
-      data: {
-        recipient: { id: senderId },
-        message: { text: "Echo: " + messageText }
-      }
-    });
+  if (!senderId) return res.sendStatus(200);
 
-    // Forward to your chatbot
+  if (messageText) {
     try {
-      await axios({
-        method: "POST",
-        url: "http://crystal-medic-alb-2069411977.us-east-1.elb.amazonaws.com:5000/chat/",
-        headers: { "Content-Type": "application/json" },
-        data: {
+      // 1️⃣ FORWARD TO YOUR CHATBOT
+      const botResponse = await axios.post(
+        "http://crystal-medic-alb-2069411977.us-east-1.elb.amazonaws.com:5000/chat/",
+        {
           messageText: messageText,
           senderNumber: senderId,
           messageId: messaging.message.mid
-        }
-      });
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-      console.log("Message forwarded to chatbot!");
+      console.log("Chatbot replied:", botResponse.data);
+
+      const replyText = botResponse.data.reply || "I received your message.";
+
+      // 2️⃣ SEND THE CHATBOT RESPONSE BACK TO FACEBOOK USER
+      await axios.post(
+        `https://graph.facebook.com/v17.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`,
+        {
+          recipient: { id: senderId },
+          message: { text: replyText }
+        }
+      );
+
+      console.log("Replied to user:", replyText);
     } catch (err) {
-      console.error("Chatbot forwarding failed:", err);
+      console.error("Error:", err.response?.data || err.message);
+
+      // Send fallback message
+      await axios.post(
+        `https://graph.facebook.com/v24.0/104072462367834/messages?access_token=${PAGE_ACCESS_TOKEN}`,
+        {
+          recipient: { id: senderId },
+          message: { text: "Sorry, something went wrong!" }
+        }
+      );
     }
   }
 
