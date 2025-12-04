@@ -43,7 +43,7 @@ app.post("/webhook", async (req, res) => {
 
       // 2️⃣ SEND THE CHATBOT RESPONSE BACK TO FACEBOOK USER
       await axios.post(
-        `https://graph.facebook.com/v17.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`,
+        `https://graph.facebook.com/v24.0/104072462367834/messages?access_token=${PAGE_ACCESS_TOKEN}`,
         {
           recipient: { id: senderId },
           message: { text: replyText }
