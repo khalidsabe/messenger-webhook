@@ -8,7 +8,7 @@ app.use(express.json());
 const WEBHOOK_VERIFY_TOKEN = "Itv@2021";
 const PAGE_ACCESS_TOKEN = "EAAQlp2JF0csBQLZBoPTrVAF9ngUDTXXlzj1ZCM4BG0JkW7l90GSy6tX8tv4ZByL0XVSC1W2EJwSXsrglVgwr5cuhYhSfqQHag8nOUc3tTHnmqdzJxlpRr37FS8EKf2BZBAvaMZBKuiZBUhZAI8821pj8KWq5JWOoINYqAVafvsVsZCWZALXNcZBjx5aPHocduqfHE6vuAZD";
 
-const PORT = 80 //process.env.PORT || 3000;
+const PORT = 3000 //process.env.PORT || 3000;
 
 // Handle incoming Messenger webhooks
 app.post("/webhook", async (req, res) => {
