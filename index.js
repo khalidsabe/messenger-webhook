@@ -31,8 +31,7 @@ app.post("/webhook", async (req, res) => {
         "http://crystal-medic-alb-2069411977.us-east-1.elb.amazonaws.com:5000/chat/",
         {
           messageText: messageText,
-          senderNumber: senderId,
-          messageId: messaging.message.mid
+          senderNumber: senderId
         },
         { headers: { "Content-Type": "application/json" } }
       );
